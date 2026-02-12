@@ -55,11 +55,11 @@ SSH 连接到开发机 → 运行 CLI 工具 → 查看日志
 | Rust | 性能好、无依赖 | 学习曲线陡 | ⭕ |
 | Go | 编译单文件、跨平台 | 生态一般 | ✅ **推荐** |
 
-**推荐方案**: Go 语言
-- 编译为单个可执行文件，无依赖
-- 跨平台编译简单
-- 并发性能好（日志流处理）
-- 标准库完善
+**当前方案**: TypeScript + Node.js
+- 生态丰富，开发效率高
+- 跨平台支持良好
+- 异步 IO 性能优秀（日志流处理）
+- 易于维护和扩展
 
 ### 2.2 架构设计
 
@@ -179,39 +179,33 @@ hdc workflow dev --watch     # 文件变化自动重新构建安装
 
 ```
 harmony-dev-cli/
-├── cmd/                     # 命令行入口
-│   ├── root.go             # 根命令
-│   ├── build.go            # build 命令
-│   ├── install.go          # install 命令
-│   ├── launch.go           # launch 命令
-│   ├── log.go              # log 命令
-│   ├── device.go           # device 命令
-│   └── workflow.go         # workflow 命令
-├── internal/               # 内部实现
-│   ├── builder/            # 构建模块
-│   │   └── hvigor.go
-│   ├── installer/          # 安装模块
-│   │   └── hdc.go
-│   ├── launcher/           # 启动模块
-│   │   └── ability.go
-│   ├── logger/             # 日志模块
-│   │   ├── hilog.go
-│   │   ├── filter.go
-│   │   └── formatter.go
-│   ├── device/             # 设备模块
-│   │   └── manager.go
-│   ├── config/             # 配置模块
-│   │   └── config.go
-│   └── project/            # 项目模块
-│       └── locator.go
-├── pkg/                    # 可导出包
-│   └── hdc/               # HDC SDK 封装
-├── .config/                # 配置文件
-│   └── config.yaml
-├── go.mod
-├── go.sum
-├── Makefile               # 构建脚本
-├── main.go                # 入口文件
+├── src/
+│   ├── cli.ts                 # CLI 入口
+│   ├── commands/              # 命令实现
+│   │   ├── build.ts
+│   │   ├── install.ts
+│   │   ├── launch.ts
+│   │   ├── log.ts
+│   │   ├── device.ts
+│   │   └── workflow.ts
+│   ├── modules/               # 核心模块
+│   │   ├── builder/           # 构建模块
+│   │   ├── installer/         # 安装模块
+│   │   ├── launcher/          # 启动模块
+│   │   ├── logger/            # 日志模块
+│   │   ├── device/            # 设备模块
+│   │   ├── config/            # 配置模块
+│   │   ├── project/           # 项目模块
+│   │   └── workflow/          # 工作流模块
+│   ├── utils/                 # 工具函数
+│   └── types/                 # TypeScript 类型定义
+├── plan/                     # 设计文档
+│   ├── README.md             # 项目总览
+│   ├── commands.md           # 命令详细设计
+│   ├── implementation.md      # 实现计划
+│   └── verification.md       # 验证清单
+├── package.json
+├── tsconfig.json
 └── README.md
 ```
 
@@ -281,28 +275,24 @@ hdc build && hdc install && hdc log --follow
 
 ### 6.2 日志实时流
 
-```go
-// 使用 io.Reader 流式读取
-cmd := exec.Command("hdc", "shell", "hilog", "-T")
-stdout, _ := cmd.StdoutPipe()
-cmd.Start()
-
-scanner := bufio.NewScanner(stdout)
-for scanner.Scan() {
-    // 处理每行日志
-    logLine := scanner.Text()
-    // 格式化输出
-}
+```typescript
+// 使用 execa 流式读取
+const proc = execa('hdc', ['shell', 'hilog', '-T']);
+proc.stdout?.on('data', (data) => {
+  const logLine = data.toString();
+  // 解析和格式化
+  console.log(formatLog(logLine));
+});
 ```
 
 ### 6.3 项目检测
 
-```go
+```typescript
 // 检测 HarmonyOS 项目
-func DetectProject(path string) (*Project, error) {
-    // 检查 hvigorw 文件
-    // 检查 build-profile.json5
-    // 检查 AppScope 目录
+async function detectProject(path: string): Promise<Project | null> {
+  // 检查 hvigorw 文件
+  // 检查 build-profile.json5
+  // 检查 AppScope 目录
 }
 ```
 
@@ -396,17 +386,17 @@ log:
 ### 9.1 单元测试
 
 ```
-internal/builder/hvigor_test.go
-internal/installer/hdc_test.go
-internal/logger/hilog_test.go
-internal/device/manager_test.go
+src/modules/builder/hvigor.test.ts
+src/modules/installer/hdc.test.ts
+src/modules/logger/hilog.test.ts
+src/modules/device/manager.test.ts
 ```
 
 ### 9.2 集成测试
 
 ```bash
 # 需要真实设备/模拟器
-TEST_MODE=integration go test ./...
+TEST_MODE=integration npm test
 ```
 
 ### 9.3 手动测试
@@ -463,24 +453,36 @@ TEST_MODE=integration go test ./...
 
 ---
 
-## 十三、下一步行动
+## 十三、相关文档
 
-1. **创建项目骨架**
+- **[命令详细设计](./commands.md)** - 所有命令的详细说明和用法
+- **[实现计划](./implementation.md)** - 开发阶段规划和实现细节
+- **[验证清单](./verification.md)** - 测试和验证步骤
+
+## 十四、下一步行动
+
+1. **安装依赖**
    ```bash
    cd /Users/a0000/Desktop/myproject/harmony-dev-cli
-   go mod init github.com/a0000/harmony-dev-cli
-   mkdir -p cmd internal/{builder,installer,launcher,logger,device,config,project} pkg/hdc
+   npm install
    ```
 
-2. **实现第一个命令**
-   - 选择 `hdc version` 作为起点
-   - 验证框架可用性
+2. **验证基础框架**
+   ```bash
+   npm run build
+   npm run dev -- --version
+   npm run dev -- --help
+   ```
 
-3. **实现 build 命令**
-   - 调用 `hvigorw`
-   - 解析输出
+3. **实现第一个命令**
+   - 选择 `device list` 作为起点（不需要项目文件）
+   - 验证 hdc 命令调用
+
+4. **逐步实现其他命令**
+   - 参考 [commands.md](./commands.md)
+   - 按照 [implementation.md](./implementation.md) 中的优先级
 
 ---
 
 *文档创建时间: 2025-02-12*
-*版本: v0.1.0*
+*版本: v0.2.0 (TypeScript)*
