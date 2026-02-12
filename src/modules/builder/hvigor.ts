@@ -31,16 +31,29 @@ export class HvigorBuilder {
 
     const args = this.buildArgs(options);
 
-    console.log(`执行: ${hvigorw} ${args.join(' ')}`);
+    console.log(`执行: ${hvigorw} ${args.join(' ')}\n`);
 
     try {
-      await execa(hvigorw, args, {
+      const result = await execa(hvigorw, args, {
         cwd: this.workDir,
-        stdout: 'inherit',
-        stderr: 'inherit',
+        stdout: 'pipe',
+        stderr: 'pipe',
       });
-    } catch (error) {
-      this.parseBuildError(error);
+
+      // 检查退出码
+      if (result.exitCode !== 0) {
+        const output = result.stderr || result.stdout || '';
+        if (output.trim()) {
+          this.parseBuildError(output);
+        }
+        throw new Error(`构建失败，退出码: ${result.exitCode}`);
+      }
+    } catch (error: any) {
+      // 解析错误输出
+      const output = error.stderr || error.stdout || '';
+      if (output) {
+        this.parseBuildError(output);
+      }
       throw error;
     }
   }
@@ -49,6 +62,11 @@ export class HvigorBuilder {
    * 查找 hvigorw 脚本
    */
   private findHvigorw(): string | null {
+    // 1. 优先使用全局 PATH 中的 hvigorw
+    // 直接返回 'hvigorw'，让系统 PATH 去查找
+    // 如果不存在，execa 会报错，我们捕获后尝试项目目录
+
+    // 2. 查找项目目录中的 hvigorw
     const candidates = [
       join(this.workDir, 'hvigorw'),
       join(this.workDir, 'hvigorw.bat'),
@@ -60,7 +78,8 @@ export class HvigorBuilder {
       }
     }
 
-    return null;
+    // 3. 使用全局 hvigorw
+    return 'hvigorw';
   }
 
   /**
@@ -83,11 +102,7 @@ export class HvigorBuilder {
   /**
    * 解析构建错误
    */
-  private parseBuildError(error: unknown): void {
-    const err = error as { stdout?: string; stderr?: string };
-    const output = err.stdout || err.stderr || '';
-
-    // 尝试提取错误信息
+  private parseBuildError(output: string): void {
     this.extractErrors(output);
   }
 
@@ -95,9 +110,35 @@ export class HvigorBuilder {
    * 提取错误信息
    */
   private extractErrors(output: string): void {
-    const lines = output.split('\n');
+    // 移除 ANSI 颜色代码
+    const cleanOutput = output.replace(/\x1b\[[0-9;]*m/g, '');
+    const lines = cleanOutput.split('\n');
 
+    // 先匹配 Hvigor 版本错误
     for (const line of lines) {
+      const versionErrorMatch = line.match(/Unsupported modelVersion of Hvigor ([\d.]+)/);
+      if (versionErrorMatch) {
+        console.error('\n❌ 构建失败');
+        console.error(`   当前版本: ${versionErrorMatch[1]}`);
+        // 查找支持的版本
+        for (const l of lines) {
+          const supportedMatch = l.match(/supported Hvigor modelVersion is ([\d.]+)/);
+          if (supportedMatch) {
+            console.error(`   支持版本: ${supportedMatch[1]}`);
+            console.error(`   建议: 检查 hvigor/hvigor-config.json5 中的 modelVersion`);
+            break;
+          }
+        }
+        return;
+      }
+
+      // 匹配配置错误
+      const configErrorMatch = line.match(/Error Message:\s*(.+)/i);
+      if (configErrorMatch) {
+        console.error(`   错误: ${configErrorMatch[1].trim()}`);
+        continue;
+      }
+
       // 匹配常见错误格式
       // ERROR: file:line: error message
       const errorMatch = line.match(/ERROR:\s*(.+?):(\d+):?\s*(.+)/i);
