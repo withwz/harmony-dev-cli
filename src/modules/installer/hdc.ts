@@ -1,11 +1,22 @@
 import { execa } from 'execa';
-import type { InstallOptions } from '../../types/index.js';
+import { existsSync } from 'fs';
+import { join } from 'path';
+
+interface InstallOptions {
+  hapPath?: string;
+  force: boolean;
+  replace: boolean;
+}
 
 /**
- * HDCInstaller 封装 hdc install 命令
+ * HDCInstaller - 封装 hdc install 命令
  */
 export class HDCInstaller {
-  private hdcPath: string = 'hdc';
+  private workDir: string;
+
+  constructor(workDir: string) {
+    this.workDir = workDir;
+  }
 
   /**
    * 安装 HAP 文件
@@ -14,8 +25,11 @@ export class HDCInstaller {
     let hapPath = options.hapPath;
 
     if (!hapPath) {
-      // TODO: 自动查找 HAP 文件
-      hapPath = 'entry/build/default/outputs/default/entry-default.hap';
+      hapPath = this.findHapFile();
+    }
+
+    if (!hapPath) {
+      throw new Error('未找到 HAP 文件，请先构建项目');
     }
 
     const args = ['install'];
@@ -30,13 +44,39 @@ export class HDCInstaller {
 
     args.push(hapPath);
 
+    console.log(`执行: hdc ${args.join(' ')}`);
+
     try {
-      const { stdout } = await execa(this.hdcPath, args, {
+      await execa('hdc', args, {
         stdout: 'inherit',
         stderr: 'inherit',
       });
+      console.log('\n✅ 安装成功');
     } catch (error) {
-      throw new Error(`安装失败: ${error}`);
+      console.error('\n❌ 安装失败');
+      throw error;
     }
+  }
+
+  /**
+   * 查找 HAP 文件
+   */
+  private findHapFile(): string | null {
+    const candidates = [
+      // Debug 模式
+      join(this.workDir, 'entry/build/default/outputs/default/entry-default.hap'),
+      join(this.workDir, 'entry/build/default/outputs/default/entry-signed.hap'),
+      // Release 模式
+      join(this.workDir, 'entry/build/release/outputs/default/entry-release.hap'),
+      join(this.workDir, 'entry/build/release/outputs/default/entry-signed-release.hap'),
+    ];
+
+    for (const candidate of candidates) {
+      if (existsSync(candidate)) {
+        return candidate;
+      }
+    }
+
+    return null;
   }
 }

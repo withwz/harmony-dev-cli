@@ -4,12 +4,12 @@ import { HDCInstaller } from '../modules/installer/hdc.js';
 export const installCommand = new Command('install')
   .description('安装 HAP 到设备')
   .argument('[hap-path]', 'HAP 文件路径')
-  .option('-f, --force', '覆盖安装')
+  .option('-f, --force', '强制覆盖安装')
   .option('-r, --replace', '替换现有应用')
   .action(async (hapPath: string | undefined, options) => {
-    const installer = new HDCInstaller();
+    const installer = new HDCInstaller(process.cwd());
 
-    console.log('📦 正在安装应用...');
+    console.log('📦 正在安装应用...\n');
 
     try {
       await installer.install({
@@ -17,9 +17,7 @@ export const installCommand = new Command('install')
         force: options.force || false,
         replace: options.replace || false,
       });
-      console.log('✅ 安装成功');
     } catch (error) {
-      console.error('❌ 安装失败:', error);
       process.exit(1);
     }
   });
