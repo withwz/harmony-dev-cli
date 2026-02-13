@@ -7,7 +7,6 @@
 **DevEco Studio 的痛点：**
 - IDE 太重，只为构建和查看日志就得打开
 - 构建错误信息混乱，截图给 LLM 不够清晰
-- 远程开发时图形界面体验差
 
 **用 CLI 工具：**
 ```
@@ -112,21 +111,7 @@ hv build && hv install
 hv log -f
 ```
 
-### 场景 2：远程开发
-
-```bash
-# SSH 连接到开发机
-ssh user@dev-machine
-
-# 进入项目，直接构建安装
-cd harmony-project
-hv build && hv install
-
-# 查看日志
-hv log -f
-```
-
-### 场景 3：快速调试循环
+### 场景 2：快速调试循环
 
 ```bash
 # 修改代码后一条命令完成
