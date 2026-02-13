@@ -24,12 +24,18 @@ Claude: [调用 hv_build，分析错误] 找到问题了，是类型错误...
 - Node.js 18+
 - HarmonyOS SDK (hvigorw, hdc)
 
-### 1. 安装 CLI 工具
+### 1. 克隆项目
+
+```bash
+git clone https://github.com/a0000/harmony-dev-cli.git
+cd harmony-dev-cli
+```
+
+### 2. 安装 CLI 工具
 
 MCP Server 依赖 `hv` 命令，需要先全局安装：
 
 ```bash
-cd harmony-dev-cli
 npm install -g .
 ```
 
@@ -38,7 +44,7 @@ npm install -g .
 hv --version
 ```
 
-### 2. 安装 MCP Server
+### 3. 安装 MCP Server
 
 ```bash
 cd mcp-server
@@ -46,7 +52,7 @@ npm install
 npm run build
 ```
 
-### 3. 配置 Claude Desktop
+### 4. 配置 Claude Desktop
 
 编辑 Claude Desktop 配置文件：
 
@@ -64,7 +70,7 @@ npm run build
 }
 ```
 
-### 4. 重启 Claude Desktop
+### 5. 重启 Claude Desktop
 
 重启后 MCP 工具自动加载。
 
