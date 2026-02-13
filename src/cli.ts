@@ -5,6 +5,7 @@ import { versionCommand } from './commands/version.js';
 import { buildCommand } from './commands/build.js';
 import { installCommand } from './commands/install.js';
 import { logCommand } from './commands/log.js';
+import { startCommand } from './commands/start.js';
 
 const program = new Command();
 
@@ -15,6 +16,7 @@ program
   .addCommand(versionCommand)
   .addCommand(buildCommand)
   .addCommand(installCommand)
+  .addCommand(startCommand)
   .addCommand(logCommand);
 
 program.parse();
