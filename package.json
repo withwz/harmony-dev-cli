@@ -8,6 +8,7 @@
     "hv": "./dist/cli.js"
   },
   "scripts": {
+    "prepare": "npm run build",
     "build": "tsc",
     "dev": "tsx src/cli.ts",
     "start": "node dist/cli.js",
