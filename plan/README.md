@@ -1,39 +1,49 @@
-# HarmonyOS Dev CLI
+# 开发计划
 
-独立于 DevEco Studio 的 HarmonyOS 开发命令行工具。
+## 目标
 
-## 功能
+脱离 DevEco Studio 运行 HarmonyOS 项目，方便日志查看和 LLM 协作调试。
 
-脱离 DevEco Studio 运行项目，方便日志查看和与 LLM 协作调试。
+## MVP (已完成)
 
-### 已实现 (MVP)
-
-| 命令 | 功能 |
-|------|------|
-| `hv build` | 构建项目 |
-| `hv install` | 安装应用到设备 |
-| `hv log` | 查看实时日志 |
-
-## 使用
-
-```bash
-# 构建项目
-hv build
-
-# 安装应用
-hv install
-
-# 查看日志
-hv log -f
-```
+- ✅ hv build - 调用 hvigorw 构建
+- ✅ hv install - 调用 hdc install 安装
+- ✅ hv log - 调用 hilog 查看日志
 
 ## 技术栈
 
 - TypeScript + Node.js (ESM)
-- Commander.js
-- execa
+- Commander.js (CLI 框架)
+- execa (执行命令)
+- ora (loading 效果)
+- chalk (颜色输出)
 
-## 依赖
+## 目录结构
 
-- Node.js >= 18
-- HarmonyOS SDK (hvigorw, hdc)
+```
+src/
+├── cli.ts              # CLI 入口
+├── commands/           # 命令实现
+│   ├── build.ts
+│   ├── install.ts
+│   └── log.ts
+└── modules/            # 核心模块
+    ├── builder/        # hvigorw 封装
+    ├── installer/      # hdc install 封装
+    └── logger/         # hilog 封装
+```
+
+## 暂不做
+
+- ❌ 设备管理 (device list/select)
+- ❌ 应用控制 (launch start/stop)
+- ❌ 工作流 (workflow dev)
+- ❌ 文件监听 (--watch)
+- ❌ JSON 输出 (--json)
+- ❌ 配置文件
+
+## 依赖的外部命令
+
+- `hvigorw` / `hvigorw.bat` - 构建
+- `hdc` / `hdc.exe` - 设备工具
+- `hdc shell hilog` - 日志
