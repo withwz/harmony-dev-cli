@@ -8,7 +8,11 @@
 
 - ✅ hv build - 调用 hvigorw 构建
 - ✅ hv install - 调用 hdc install 安装
-- ✅ hv log - 调用 hilog 查看日志
+- ✅ hv log - 调用 hilog 查看日志（支持过滤）
+
+## MCP Server (已完成)
+
+- ✅ harmonyos-control - 4 个工具：build/install/log/doctor
 
 ## 技术栈
 
@@ -31,6 +35,12 @@ src/
     ├── builder/        # hvigorw 封装
     ├── installer/      # hdc install 封装
     └── logger/         # hilog 封装
+
+mcp-server/             # MCP Server
+├── src/
+│   ├── index.ts        # MCP Server 入口
+│   └── doctor.ts       # 环境检查
+└── package.json
 ```
 
 ## 暂不做

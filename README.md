@@ -80,8 +80,10 @@ hv install ./app.hap  # 安装指定文件
 ### hv log - 查看日志
 
 ```bash
-hv log                # 查看所有日志
-hv log -f             # 实时跟踪日志（推荐）
+hv log                # 查看所有日志（默认只显示 I/W/E 级别）
+hv log -f             # 实时跟踪日志
+hv log --filter "关键字"  # 过滤日志
+hv log --level E      # 只显示错误
 ```
 
 **日志输出示例：**
@@ -143,7 +145,7 @@ npm run build
 ```json
 {
   "mcpServers": {
-    "harmonyos": {
+    "harmonyos-control": {
       "command": "node",
       "args": ["/Users/a0000/Desktop/myproject/harmony-dev-cli/mcp-server/dist/index.js"]
     }
