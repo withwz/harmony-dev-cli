@@ -26,6 +26,9 @@ hv build
 # 安装到设备
 hv install
 
+# 启动应用
+hv start
+
 # 查看实时日志
 hv log -f
 ```
@@ -81,6 +84,27 @@ hv log --level E      # 只显示错误
 02-13 11:01:33.880  1360  1360 I A01b01/HOME: ComponentPosShadowCache: getCache
 ```
 
+### hv start - 启动应用
+
+```bash
+hv start              # 自动读取配置启动
+hv start -b com.example.app -a EntryAbility  # 指定参数启动
+```
+
+**启动成功：**
+```
+🚀 正在启动应用...
+   包名: com.example.myapplication
+   Ability: EntryAbility
+   模块: entry
+
+✅ 应用已启动
+```
+
+**说明：**
+- 默认自动读取项目配置（`AppScope/app.json5`）
+- Ability 名称从 `entry/src/main/ets/entryability/*.ets` 文件名获取
+
 ## 使用场景
 
 ### 与 Claude 协作开发
@@ -96,15 +120,15 @@ hv build
 # 4. 修复后重新构建安装
 hv build && hv install
 
-# 5. 查看运行日志确认
-hv log -f
+# 5. 启动应用并查看日志
+hv start && hv log -f
 ```
 
 ### 快速调试循环
 
 ```bash
 # 修改代码后一条命令完成
-hv build && hv install && hv log -f
+hv build && hv install && hv start && hv log -f
 ```
 
 ## 与 DevEco Studio 对照
@@ -113,6 +137,7 @@ hv build && hv install && hv log -f
 |------|---------------|---------|
 | 构建项目 | Build → Build Hap(s) | `hv build` |
 | 安装到设备 | Run → Run 'entry' | `hv install` |
+| 启动应用 | 点击运行按钮 | `hv start` |
 | 查看日志 | 底部 HiLog 窗口 | `hv log -f` |
 
 ## 开发

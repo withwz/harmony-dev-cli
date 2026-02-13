@@ -8,11 +8,12 @@
 
 - ✅ hv build - 调用 hvigorw 构建
 - ✅ hv install - 调用 hdc install 安装
+- ✅ hv start - 调用 aa start 启动应用
 - ✅ hv log - 调用 hilog 查看日志（支持过滤）
 
 ## MCP Server (已完成)
 
-- ✅ harmonyos-control - 4 个工具：build/install/log/doctor
+- ✅ harmonyos-control - 5 个工具：build/install/start/log/doctor
 
 ## 技术栈
 
@@ -30,10 +31,12 @@ src/
 ├── commands/           # 命令实现
 │   ├── build.ts
 │   ├── install.ts
+│   ├── start.ts
 │   └── log.ts
 └── modules/            # 核心模块
     ├── builder/        # hvigorw 封装
     ├── installer/      # hdc install 封装
+    ├── launcher/       # aa start 封装
     └── logger/         # hilog 封装
 
 mcp-server/             # MCP Server
@@ -56,4 +59,5 @@ mcp-server/             # MCP Server
 
 - `hvigorw` / `hvigorw.bat` - 构建
 - `hdc` / `hdc.exe` - 设备工具
+- `hdc shell aa start` - 启动应用
 - `hdc shell hilog` - 日志
