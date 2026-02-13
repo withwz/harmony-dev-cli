@@ -58,7 +58,7 @@ const { stdout } = await execa('./hvigorw', ['assembleHap'], {
 ```bash
 # 需要一个 HarmonyOS 项目
 cd /path/to/harmony/project
-hdc build
+hv build
 ```
 
 **HAP 文件位置检测**:
@@ -76,14 +76,14 @@ const hapPaths = [
 **文件**: `src/modules/device/manager.ts`
 
 **核心功能**:
-1. 列出设备 (`hdc list targets`)
+1. 列出设备 (`hv list targets`)
 2. 选择设备
 3. 获取设备信息
 
 **实现要点**:
 ```typescript
 // 解析设备列表输出
-const { stdout } = await execa('hdc', ['list', 'targets']);
+const { stdout } = await execa('hv', ['list', 'targets']);
 // 输出格式: "192.168.1.100:5555\n192.168.1.101:5555"
 const devices = stdout.trim().split('\n').map(id => ({
   id,
@@ -95,28 +95,28 @@ const devices = stdout.trim().split('\n').map(id => ({
 **验证方式**:
 ```bash
 # 需要连接的 HarmonyOS 设备
-hdc device list
+hv device list
 ```
 
 ---
 
 ### 2.4 install 命令
-**文件**: `src/modules/installer/hdc.ts`
+**文件**: `src/modules/installer/hv.ts`
 
 **核心功能**:
 1. 查找 HAP 文件
-2. 调用 `hdc install`
+2. 调用 `hv install`
 
 **实现要点**:
 ```typescript
 // 自动查找最新的 HAP 文件
 const hapPath = await findLatestHap(projectDir, module);
-await execa('hdc', ['install', '-r', hapPath]);
+await execa('hv', ['install', '-r', hapPath]);
 ```
 
 **验证方式**:
 ```bash
-hdc install
+hv install
 ```
 
 ---
@@ -125,24 +125,24 @@ hdc install
 **文件**: `src/modules/launcher/ability.ts`
 
 **核心功能**:
-1. 启动应用 (`hdc shell aa start`)
-2. 停止应用 (`hdc shell aa force-stop`)
+1. 启动应用 (`hv shell aa start`)
+2. 停止应用 (`hv shell aa force-stop`)
 3. 重启应用
 
 **实现要点**:
 ```typescript
 // 启动应用
-await execa('hdc', ['shell', 'aa', 'start', '-a', ability, '-b', bundleName]);
+await execa('hv', ['shell', 'aa', 'start', '-a', ability, '-b', bundleName]);
 
 // 停止应用
-await execa('hdc', ['shell', 'aa', 'force-stop', bundleName]);
+await execa('hv', ['shell', 'aa', 'force-stop', bundleName]);
 ```
 
 **验证方式**:
 ```bash
-hdc launch com.example.app
-hdc launch com.example.app --stop
-hdc launch com.example.app --restart
+hv launch com.example.app
+hv launch com.example.app --stop
+hv launch com.example.app --restart
 ```
 
 ---
@@ -151,14 +151,14 @@ hdc launch com.example.app --restart
 **文件**: `src/modules/logger/hilog.ts`
 
 **核心功能**:
-1. 读取日志 (`hdc shell hilog`)
+1. 读取日志 (`hv shell hilog`)
 2. 实时跟踪日志
 3. 过滤和格式化
 
 **实现要点**:
 ```typescript
 // 实时日志
-const proc = execa('hdc', ['shell', 'hilog', '-T']);
+const proc = execa('hv', ['shell', 'hilog', '-T']);
 proc.stdout?.on('data', (data) => {
   const logLine = data.toString();
   // 解析和格式化
@@ -175,9 +175,9 @@ proc.stdout?.on('data', (data) => {
 
 **验证方式**:
 ```bash
-hdc log --follow
-hdc log --filter "MyApp"
-hdc log --level E
+hv log --follow
+hv log --filter "MyApp"
+hv log --level E
 ```
 
 ---
@@ -202,7 +202,7 @@ async runDev() {
 
 **验证方式**:
 ```bash
-hdc workflow dev
+hv workflow dev
 ```
 
 ---
@@ -213,7 +213,7 @@ hdc workflow dev
 **文件**: `src/modules/config/manager.ts`
 
 **功能**:
-1. 读取 `~/.hdc/config.yaml`
+1. 读取 `~/.hv/config.yaml`
 2. 提供默认配置
 3. 保存配置
 
@@ -336,12 +336,12 @@ npm test
 - [ ] `npm run dev -- --help` 显示帮助信息
 
 ### 命令验证
-- [ ] `hdc build` 构建成功
-- [ ] `hdc device list` 列出设备
-- [ ] `hdc install` 安装成功
-- [ ] `hdc launch` 启动成功
-- [ ] `hdc log` 显示日志
-- [ ] `hdc workflow dev` 完整流程成功
+- [ ] `hv build` 构建成功
+- [ ] `hv device list` 列出设备
+- [ ] `hv install` 安装成功
+- [ ] `hv launch` 启动成功
+- [ ] `hv log` 显示日志
+- [ ] `hv workflow dev` 完整流程成功
 
 ### 边缘情况
 - [ ] 设备未连接时提示

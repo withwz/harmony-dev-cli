@@ -3,7 +3,7 @@
 ## 命令总览
 
 ```
-hdc
+hv
 ├── build [module]          # 构建项目
 ├── install [hap-path]      # 安装应用
 ├── launch <bundle-name>    # 启动/停止/重启应用
@@ -28,7 +28,7 @@ hdc
 
 ### 用法
 ```bash
-hdc build [module] [options]
+hv build [module] [options]
 ```
 
 ### 参数
@@ -47,19 +47,19 @@ hdc build [module] [options]
 ### 示例
 ```bash
 # 构建默认模块 (Debug)
-hdc build
+hv build
 
 # 构建 entry 模块 (Debug)
-hdc build entry
+hv build entry
 
 # 清理后构建
-hdc build --clean
+hv build --clean
 
 # Release 模式构建
-hdc build --release
+hv build --release
 
 # 监听模式（文件变化自动重新构建）
-hdc build --watch
+hv build --watch
 ```
 
 ### 底层命令
@@ -79,11 +79,11 @@ hdc build --watch
 ## 2. install - 安装命令
 
 ### 功能
-使用 hdc install 将 HAP 文件安装到设备
+使用 hv install 将 HAP 文件安装到设备
 
 ### 用法
 ```bash
-hdc install [hap-path] [options]
+hv install [hap-path] [options]
 ```
 
 ### 参数
@@ -100,28 +100,28 @@ hdc install [hap-path] [options]
 ### 示例
 ```bash
 # 自动查找并安装 HAP
-hdc install
+hv install
 
 # 安装指定 HAP 文件
-hdc install ./entry/build/default/outputs/default/entry-default.hap
+hv install ./entry/build/default/outputs/default/entry-default.hap
 
 # 强制覆盖安装
-hdc install --force
+hv install --force
 
 # 替换现有应用
-hdc install -r
+hv install -r
 ```
 
 ### 底层命令
 ```bash
 # 基本安装
-hdc install app.hap
+hv install app.hap
 
 # 覆盖安装
-hdc install -f app.hap
+hv install -f app.hap
 
 # 替换安装
-hdc install -r app.hap
+hv install -r app.hap
 ```
 
 ### HAP 文件位置规则
@@ -142,7 +142,7 @@ hdc install -r app.hap
 
 ### 用法
 ```bash
-hdc launch <bundle-name> [options]
+hv launch <bundle-name> [options]
 ```
 
 ### 参数
@@ -160,29 +160,29 @@ hdc launch <bundle-name> [options]
 ### 示例
 ```bash
 # 启动应用
-hdc launch com.example.app
+hv launch com.example.app
 
 # 启动指定 Ability
-hdc launch com.example.app --ability MainAbility
+hv launch com.example.app --ability MainAbility
 
 # 停止应用
-hdc launch com.example.app --stop
+hv launch com.example.app --stop
 
 # 重启应用
-hdc launch com.example.app --restart
+hv launch com.example.app --restart
 ```
 
 ### 底层命令
 ```bash
 # 启动应用
-hdc shell aa start -a MainAbility -b com.example.app
+hv shell aa start -a MainAbility -b com.example.app
 
 # 停止应用
-hdc shell aa force-stop com.example.app
+hv shell aa force-stop com.example.app
 
 # 重启应用（先停止再启动）
-hdc shell aa force-stop com.example.app
-hdc shell aa start -a MainAbility -b com.example.app
+hv shell aa force-stop com.example.app
+hv shell aa start -a MainAbility -b com.example.app
 ```
 
 ---
@@ -194,7 +194,7 @@ hdc shell aa start -a MainAbility -b com.example.app
 
 ### 用法
 ```bash
-hdc log [options]
+hv log [options]
 ```
 
 ### 选项
@@ -218,44 +218,44 @@ hdc log [options]
 ### 示例
 ```bash
 # 查看所有日志
-hdc log
+hv log
 
 # 实时跟踪日志
-hdc log --follow
-hdc log -f
+hv log --follow
+hv log -f
 
 # 过滤日志
-hdc log --filter "MyApp"
+hv log --filter "MyApp"
 
 # 只显示错误日志
-hdc log --level E
+hv log --level E
 
 # 最近 1 小时的日志
-hdc log --since 1h
+hv log --since 1h
 
 # 保存日志到文件
-hdc log --save output.txt
+hv log --save output.txt
 
 # 清空日志缓冲区
-hdc log --clear
+hv log --clear
 
 # 组合使用
-hdc log -f --filter "MyApp" --level I
+hv log -f --filter "MyApp" --level I
 ```
 
 ### 底层命令
 ```bash
 # 查看日志
-hdc shell hilog
+hv shell hilog
 
 # 实时日志
-hdc shell hilog -T
+hv shell hilog -T
 
 # 按级别过滤
-hdc shell hilog -L I
+hv shell hilog -L I
 
 # 清空日志
-hdc shell hilog -r
+hv shell hilog -r
 ```
 
 ---
@@ -269,7 +269,7 @@ hdc shell hilog -r
 
 #### 5.1 device list - 列出设备
 ```bash
-hdc device list
+hv device list
 ```
 
 **输出示例：**
@@ -281,17 +281,17 @@ hdc device list
 
 #### 5.2 device select - 选择设备
 ```bash
-hdc device select <device-id>
+hv device select <device-id>
 ```
 
 **示例：**
 ```bash
-hdc device select 192.168.1.100:5555
+hv device select 192.168.1.100:5555
 ```
 
 #### 5.3 device info - 设备信息
 ```bash
-hdc device info
+hv device info
 ```
 
 **输出示例：**
@@ -305,16 +305,16 @@ hdc device info
 
 #### 5.4 device shell - 进入设备 Shell
 ```bash
-hdc device shell
+hv device shell
 ```
 
 ### 底层命令
 ```bash
 # 列出设备
-hdc list targets
+hv list targets
 
 # 指定设备执行命令
-hdc -t <device-id> shell <command>
+hv -t <device-id> shell <command>
 ```
 
 ---
@@ -328,7 +328,7 @@ hdc -t <device-id> shell <command>
 
 #### 6.1 workflow dev - 开发工作流
 ```bash
-hdc workflow dev [options]
+hv workflow dev [options]
 ```
 
 **选项：**
@@ -346,18 +346,18 @@ hdc workflow dev [options]
 **示例：**
 ```bash
 # 执行开发工作流
-hdc workflow dev
+hv workflow dev
 
 # 监听模式
-hdc workflow dev --watch
+hv workflow dev --watch
 
 # 事件流模式（便于 Claude 解析）
-hdc workflow dev --events
+hv workflow dev --events
 ```
 
 #### 6.2 workflow test - 测试工作流
 ```bash
-hdc workflow test
+hv workflow test
 ```
 
 **流程：**
@@ -367,7 +367,7 @@ hdc workflow test
 
 #### 6.3 workflow deploy - 部署工作流
 ```bash
-hdc workflow deploy
+hv workflow deploy
 ```
 
 **流程：**
@@ -379,7 +379,7 @@ hdc workflow deploy
 ## 7. 全局选项
 
 ```bash
-hdc [global-options] <command> [args]
+hv [global-options] <command> [args]
 
 全局选项:
   --version     显示版本信息
@@ -392,7 +392,7 @@ hdc [global-options] <command> [args]
 
 ## 8. 配置文件
 
-配置文件位置：`~/.hdc/config.yaml`
+配置文件位置：`~/.hv/config.yaml`
 
 ```yaml
 # 项目配置
@@ -455,7 +455,7 @@ log:
 ### 常见错误
 | 错误 | 原因 | 解决方案 |
 |------|------|----------|
-| hdc: command not found | HDC 工具未安装 | 安装 HarmonyOS SDK |
+| hv: command not found | HDC 工具未安装 | 安装 HarmonyOS SDK |
 | No devices found | 设备未连接 | 连接设备并开启 USB 调试 |
 | Build failed | 编译错误 | 检查代码错误信息 |
 | Install failed | 安装失败 | 检查设备存储空间 |

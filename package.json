@@ -1,11 +1,11 @@
 {
   "name": "harmony-dev-cli",
   "version": "0.1.0",
-  "description": "HarmonyOS Dev CLI - 独立于 DevEco Studio 的开发工具",
+  "description": "HarmonyOS Dev CLI - 独立于 DevEco Studio 的开发工具 (hv命令)",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "hdc": "./dist/cli.js"
+    "hv": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",

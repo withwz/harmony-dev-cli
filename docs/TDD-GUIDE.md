@@ -73,10 +73,10 @@ export class Logger {
 ```typescript
 // device/manager.test.ts
 describe('DeviceManager', () => {
-  it('应该解析 hdc list targets 输出', async () => {
+  it('应该解析 hv list targets 输出', async () => {
     const manager = new DeviceManager();
 
-    // Mock hdc 命令返回
+    // Mock hv 命令返回
     mockExeca.returnValue({
       stdout: '192.168.1.100:5555\n192.168.1.101:5555'
     });
@@ -103,7 +103,7 @@ npm run test:unit
 // device/manager.ts
 export class DeviceManager {
   async list() {
-    const { stdout } = await execa('hdc', ['list', 'targets']);
+    const { stdout } = await execa('hv', ['list', 'targets']);
     const lines = stdout.trim().split('\n');
 
     return lines.map(id => ({
@@ -167,11 +167,11 @@ npm run test:integration
 ```typescript
 // 示例：测试 DeviceManager 调用 execa
 describe('DeviceManager', () => {
-  it('应该调用 hdc list targets', async () => {
+  it('应该调用 hv list targets', async () => {
     const manager = new DeviceManager();
     await manager.list();
 
-    expect(execa).toHaveBeenCalledWith('hdc', ['list', 'targets']);
+    expect(execa).toHaveBeenCalledWith('hv', ['list', 'targets']);
   });
 });
 ```

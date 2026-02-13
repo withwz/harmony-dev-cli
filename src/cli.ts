@@ -9,7 +9,7 @@ import { logCommand } from './commands/log.js';
 const program = new Command();
 
 program
-  .name('hdc')
+  .name('hv')
   .description('HarmonyOS Dev CLI - 构建和调试工具')
   .version('0.1.0')
   .addCommand(versionCommand)

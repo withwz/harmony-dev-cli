@@ -28,8 +28,8 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │                     使用 CLI 工具                              │
 ├─────────────────────────────────────────────────────────────────┤
-│  修改代码 → hdc build → 看到清晰的错误 → Claude 直接读取      │
-│  → hdc install → hdc launch → hdc log --follow               │
+│  修改代码 → hv build → 看到清晰的错误 → Claude 直接读取      │
+│  → hv install → hv launch → hv log --follow               │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -59,7 +59,7 @@
 ### 前置要求
 
 - Node.js 18+
-- HarmonyOS SDK (hdc 命令)
+- HarmonyOS SDK (hv 命令)
 - HarmonyOS 项目 (hvigorw 构建脚本)
 
 ### 从源码安装
@@ -91,7 +91,7 @@ npx harmony-dev-cli --help
 
 ```bash
 # 1. Claude 修改代码后，你运行构建
-hdc build
+hv build
 
 # 2. 构建失败，错误信息清晰显示
 ❌ 构建失败
@@ -115,13 +115,13 @@ hdc build
 ssh user@dev-machine
 
 # 进入项目目录，直接构建
-cd harmony-project && hdc build
+cd harmony-project && hv build
 
 # 安装到设备
-hdc install
+hv install
 
 # 实时查看日志
-hdc log --follow
+hv log --follow
 ```
 
 **对比 DevEco Studio**:
@@ -134,7 +134,7 @@ hdc log --follow
 
 ```bash
 # 一条命令完成整个流程
-hdc workflow dev
+hv workflow dev
 
 # 等价于以下操作：
 # 1. 构建
@@ -150,7 +150,7 @@ hdc workflow dev
 ### 1. 构建 HarmonyOS 项目
 
 ```bash
-hdc build
+hv build
 
 # 输出:
 🔨 正在构建模块: entry
@@ -162,7 +162,7 @@ hdc build
 ### 2. 查看构建日志
 
 ```bash
-hdc build --verbose
+hv build --verbose
 
 # 输出详细构建过程，方便定位问题
 ```
@@ -170,7 +170,7 @@ hdc build --verbose
 ### 3. 构建失败时查看错误
 
 ```bash
-hdc build
+hv build
 
 # 输出:
 ❌ 构建失败
@@ -182,7 +182,7 @@ hdc build
 ### 4. 安装到设备
 
 ```bash
-hdc install
+hv install
 
 # 输出:
 📦 正在安装: entry-default.hap
@@ -192,7 +192,7 @@ hdc install
 ### 5. 查看运行日志
 
 ```bash
-hdc log --follow
+hv log --follow
 
 # 实时输出:
 [I] MyApp: Application started
@@ -206,38 +206,38 @@ hdc log --follow
 
 ### 构建
 ```bash
-hdc build                    # 构建默认模块
-hdc build entry             # 构建指定模块
-hdc build --clean           # 清理后构建
-hdc build --release         # Release 模式
+hv build                    # 构建默认模块
+hv build entry             # 构建指定模块
+hv build --clean           # 清理后构建
+hv build --release         # Release 模式
 ```
 
 ### 安装
 ```bash
-hdc install                  # 自动查找 HAP 并安装
-hdc install ./app.hap       # 安装指定文件
-hdc install --force         # 强制覆盖安装
+hv install                  # 自动查找 HAP 并安装
+hv install ./app.hap       # 安装指定文件
+hv install --force         # 强制覆盖安装
 ```
 
 ### 运行
 ```bash
-hdc launch com.example.app              # 启动应用
-hdc launch com.example.app --stop      # 停止应用
-hdc launch com.example.app --restart   # 重启应用
+hv launch com.example.app              # 启动应用
+hv launch com.example.app --stop      # 停止应用
+hv launch com.example.app --restart   # 重启应用
 ```
 
 ### 日志
 ```bash
-hdc log                      # 查看所有日志
-hdc log --follow            # 实时跟踪（类似 tail -f）
-hdc log --filter "MyApp"    # 过滤日志
-hdc log --level E           # 只显示错误
+hv log                      # 查看所有日志
+hv log --follow            # 实时跟踪（类似 tail -f）
+hv log --filter "MyApp"    # 过滤日志
+hv log --level E           # 只显示错误
 ```
 
 ### 工作流
 ```bash
-hdc workflow dev             # 一键：构建→安装→启动→查看日志
-hdc workflow dev --watch     # 监听文件变化自动重新构建
+hv workflow dev             # 一键：构建→安装→启动→查看日志
+hv workflow dev --watch     # 监听文件变化自动重新构建
 ```
 
 ---
@@ -246,14 +246,14 @@ hdc workflow dev --watch     # 监听文件变化自动重新构建
 
 | 操作 | DevEco Studio | CLI 命令 |
 |------|---------------|----------|
-| 构建项目 | Build → Build Hap(s) | `hdc build` |
-| 清理构建 | Build → Clean Project | `hdc build --clean` |
-| 安装到设备 | Run → Run 'entry' | `hdc install` |
-| 启动应用 | 点击运行按钮 | `hdc launch com.example.app` |
-| 停止应用 | 点击停止按钮 | `hdc launch com.example.app --stop` |
-| 查看日志 | 底部 HiLog 窗口 | `hdc log --follow` |
-| 过滤日志 | HiLog 窗口筛选 | `hdc log --filter "Tag"` |
-| 查看设备 | Device Manager | `hdc device list` |
+| 构建项目 | Build → Build Hap(s) | `hv build` |
+| 清理构建 | Build → Clean Project | `hv build --clean` |
+| 安装到设备 | Run → Run 'entry' | `hv install` |
+| 启动应用 | 点击运行按钮 | `hv launch com.example.app` |
+| 停止应用 | 点击停止按钮 | `hv launch com.example.app --stop` |
+| 查看日志 | 底部 HiLog 窗口 | `hv log --follow` |
+| 过滤日志 | HiLog 窗口筛选 | `hv log --filter "Tag"` |
+| 查看设备 | Device Manager | `hv device list` |
 
 ---
 
@@ -263,7 +263,7 @@ hdc workflow dev --watch     # 监听文件变化自动重新构建
 
 ```bash
 # CLI 输出 - JSON 模式
-hdc --json build
+hv --json build
 
 {"type":"build_complete","status":"success","hap_path":"...","time":1234}
 
@@ -288,7 +288,7 @@ hdc --json build
 
 ```bash
 # CLI 输出 - 实时日志流
-hdc log --follow --json
+hv log --follow --json
 
 {"type":"log","level":"I","tag":"MyApp","message":"App started"}
 {"type":"log","level":"E","tag":"MyApp","message":"Network error"}
@@ -318,7 +318,7 @@ npm link
 
 ### 前置要求
 - Node.js 18+
-- HarmonyOS SDK (hdc 命令)
+- HarmonyOS SDK (hv 命令)
 - HarmonyOS 项目
 
 ---
@@ -336,7 +336,7 @@ npm test         # 运行测试
 
 ## 配置
 
-配置文件: `~/.hdc/config.yaml`
+配置文件: `~/.hv/config.yaml`
 
 ```yaml
 project:

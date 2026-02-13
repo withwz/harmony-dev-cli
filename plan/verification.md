@@ -10,12 +10,12 @@ node --version  # 需要 >= 18.0.0
 # npm 版本
 npm --version
 
-# HarmonyOS SDK (hdc 命令)
-hdc version
-hdc list targets
+# HarmonyOS SDK (hv 命令)
+hv version
+hv list targets
 
 # 查看设备连接状态
-hdc shell hilog -T
+hv shell hilog -T
 ```
 
 ### 安装依赖
@@ -48,7 +48,7 @@ Node: v18.x.x
 Platform: darwin/arm64
 
 $ npm run dev -- --help
-Usage: hdc [options] [command]
+Usage: hv [options] [command]
 
 HarmonyOS Dev CLI - 独立于 DevEco Studio 的开发工具
 
@@ -296,8 +296,8 @@ npm run build
 npm link
 
 # 验证
-hdc --version
-hdc build --help
+hv --version
+hv build --help
 ```
 
 ---

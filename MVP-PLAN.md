@@ -9,24 +9,24 @@
 
 ## 三个命令
 
-### 1. hdc build
+### 1. hv build
 ```bash
 cd /path/to/harmony-project
-hdc build
+hv build
 
 # 输出构建日志，构建完成显示结果
 ```
 
-### 2. hdc log
+### 2. hv log
 ```bash
-hdc log
+hv log
 
 # 输出应用运行日志（实时）
 ```
 
-### 3. hdc install
+### 3. hv install
 ```bash
-hdc install
+hv install
 
 # 安装构建好的 HAP 到设备
 ```
@@ -51,7 +51,7 @@ hdc install
 ```bash
 # 1. 构建一个 HarmonyOS 项目
 cd my-harmony-app
-hdc build
+hv build
 
 # 2. 能看到构建日志
 > Task :entry:assembleHap

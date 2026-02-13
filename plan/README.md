@@ -71,7 +71,7 @@ SSH 连接到开发机 → 运行 CLI 工具 → 查看日志
 ├─────────────────────────────────────────────────────────────┤
 │  核心层    │  Builder │ Installer │ Launcher │ Logger │ Device │
 ├─────────────────────────────────────────────────────────────┤
-│  工具层    │  hdc │ hvigor │ adb │ file-watcher │ process  │
+│  工具层    │  hv │ hvigor │ adb │ file-watcher │ process  │
 ├─────────────────────────────────────────────────────────────┤
 │  平台层    │  HarmonyOS │ Windows │ Linux │ macOS │ Android │
 └─────────────────────────────────────────────────────────────┘
@@ -85,15 +85,15 @@ SSH 连接到开发机 → 运行 CLI 工具 → 查看日志
 
 ```bash
 # 基本用法
-hdc build [module]
+hv build [module]
 
 # 示例
-hdc build                    # 构建默认模块
-hdc build entry             # 构建 entry 模块
-hdc build --watch           # 监听文件变化自动构建
-hdc build --clean           # 清理后构建
-hdc build --debug           # Debug 模式
-hdc build --release         # Release 模式
+hv build                    # 构建默认模块
+hv build entry             # 构建 entry 模块
+hv build --watch           # 监听文件变化自动构建
+hv build --clean           # 清理后构建
+hv build --debug           # Debug 模式
+hv build --release         # Release 模式
 ```
 
 **实现要点**:
@@ -104,45 +104,45 @@ hdc build --release         # Release 模式
 ### 3.2 应用安装 (install)
 
 ```bash
-hdc install [hap-path]
-hdc install --force          # 覆盖安装
-hdc install --replace        # 替换现有应用
-hdc install --r              # 替换现有应用（短选项）
+hv install [hap-path]
+hv install --force          # 覆盖安装
+hv install --replace        # 替换现有应用
+hv install --r              # 替换现有应用（短选项）
 ```
 
 **实现要点**:
-- 使用 `hdc install` 命令
+- 使用 `hv install` 命令
 - 自动查找 HAP 文件位置
 - 支持从构建输出直接安装
 
 ### 3.3 应用启动 (launch)
 
 ```bash
-hdc launch <bundle-name>
-hdc launch --restart         # 重启应用
-hdc launch --stop            # 停止应用
-hdc launch com.example.app --ability MainAbility
+hv launch <bundle-name>
+hv launch --restart         # 重启应用
+hv launch --stop            # 停止应用
+hv launch com.example.app --ability MainAbility
 ```
 
 **实现要点**:
-- 使用 `hdc shell aa start`
+- 使用 `hv shell aa start`
 - 支持停止和重启操作
 - 获取启动状态
 
 ### 3.4 日志查看 (log)
 
 ```bash
-hdc log                      # 显示所有日志
-hdc log --follow             # 实时跟踪日志（类似 tail -f）
-hdc log --filter "MyApp"     # 过滤日志
-hdc log --clear              # 清空日志缓冲区
-hdc log --level E            # 只显示错误日志
-hdc log --since 1h           # 最近1小时的日志
-hdc log --save log.txt       # 保存日志到文件
+hv log                      # 显示所有日志
+hv log --follow             # 实时跟踪日志（类似 tail -f）
+hv log --filter "MyApp"     # 过滤日志
+hv log --clear              # 清空日志缓冲区
+hv log --level E            # 只显示错误日志
+hv log --since 1h           # 最近1小时的日志
+hv log --save log.txt       # 保存日志到文件
 ```
 
 **实现要点**:
-- 使用 `hdc shell hilog`
+- 使用 `hv shell hilog`
 - 流式输出，支持颜色高亮
 - 支持多过滤器组合
 - 可保存到文件
@@ -150,14 +150,14 @@ hdc log --save log.txt       # 保存日志到文件
 ### 3.5 设备管理 (device)
 
 ```bash
-hdc device list              # 列出所有设备
-hdc device select <id>       # 选择设备
-hdc device info              # 显示当前设备信息
-hdc device shell             # 进入设备 shell
+hv device list              # 列出所有设备
+hv device select <id>       # 选择设备
+hv device info              # 显示当前设备信息
+hv device shell             # 进入设备 shell
 ```
 
 **实现要点**:
-- 使用 `hdc list targets`
+- 使用 `hv list targets`
 - 维护默认设备选择
 - 支持多设备切换
 
@@ -165,12 +165,12 @@ hdc device shell             # 进入设备 shell
 
 ```bash
 # 开发工作流：一键完成
-hdc workflow dev             # 构建 → 安装 → 启动 → 查看日志
-hdc workflow test            # 构建 → 安装 → 运行测试
-hdc workflow deploy          # 构建 → 安装
+hv workflow dev             # 构建 → 安装 → 启动 → 查看日志
+hv workflow test            # 构建 → 安装 → 运行测试
+hv workflow deploy          # 构建 → 安装
 
 # 监听模式
-hdc workflow dev --watch     # 文件变化自动重新构建安装
+hv workflow dev --watch     # 文件变化自动重新构建安装
 ```
 
 ---
@@ -218,33 +218,33 @@ harmony-dev-cli/
 **目标**: 基本构建 + 安装 + 查看日志
 
 - [x] 项目初始化（Go module）
-- [ ] `hdc build` - 封装 hvigorw
-- [ ] `hdc install` - 封装 hdc install
-- [ ] `hdc log --follow` - 实时日志
+- [ ] `hv build` - 封装 hvigorw
+- [ ] `hv install` - 封装 hv install
+- [ ] `hv log --follow` - 实时日志
 - [ ] 基本错误处理
 
 **验收标准**:
 ```bash
-hdc build && hdc install && hdc log --follow
+hv build && hv install && hv log --follow
 # 能够正常工作
 ```
 
 ### Phase 2: 设备管理 - 0.5 天
 
-- [ ] `hdc device list`
-- [ ] `hdc device select`
+- [ ] `hv device list`
+- [ ] `hv device select`
 - [ ] 自动设备选择
 
 ### Phase 3: 应用控制 - 0.5 天
 
-- [ ] `hdc launch`
-- [ ] `hdc launch --stop`
-- [ ] `hdc launch --restart`
+- [ ] `hv launch`
+- [ ] `hv launch --stop`
+- [ ] `hv launch --restart`
 
 ### Phase 4: 工作流集成 - 0.5 天
 
-- [ ] `hdc workflow dev`
-- [ ] `hdc workflow dev --watch`
+- [ ] `hv workflow dev`
+- [ ] `hv workflow dev --watch`
 
 ### Phase 5: 优化增强 - 1 天
 
@@ -277,7 +277,7 @@ hdc build && hdc install && hdc log --follow
 
 ```typescript
 // 使用 execa 流式读取
-const proc = execa('hdc', ['shell', 'hilog', '-T']);
+const proc = execa('hv', ['shell', 'hilog', '-T']);
 proc.stdout?.on('data', (data) => {
   const logLine = data.toString();
   // 解析和格式化
@@ -303,20 +303,20 @@ async function detectProject(path: string): Promise<Project | null> {
 ### 7.1 JSON 输出模式
 
 ```bash
-hdc --json build
+hv --json build
 # 输出: {"status":"success","hap_path":"/path/to/app.hap","time":1234}
 
-hdc --json device list
+hv --json device list
 # 输出: {"devices":[{"id":"123","name":"HarmonyOS Device"}]}
 
-hdc --json log --follow
+hv --json log --follow
 # 输出流: {"type":"log","level":"I","tag":"MyApp","message":"..."}
 ```
 
 ### 7.2 事件流模式
 
 ```bash
-hdc workflow dev --events
+hv workflow dev --events
 # 输出流:
 # {"type":"build_start","timestamp":...}
 # {"type":"build_complete","status":"success","hap_path":...}
@@ -328,7 +328,7 @@ hdc workflow dev --events
 ### 7.3 Claude 友好的错误输出
 
 ```bash
-hdc build
+hv build
 # 编译失败时:
 # ❌ Build Failed
 #    File: entry/src/main/ets/pages/Index.ets:42
@@ -341,7 +341,7 @@ hdc build
 ## 八、配置文件设计
 
 ```yaml
-# ~/.hdc/config.yaml
+# ~/.hv/config.yaml
 project:
   # 项目根目录（自动检测）
   root: .
@@ -387,7 +387,7 @@ log:
 
 ```
 src/modules/builder/hvigor.test.ts
-src/modules/installer/hdc.test.ts
+src/modules/installer/hv.test.ts
 src/modules/logger/hilog.test.ts
 src/modules/device/manager.test.ts
 ```
@@ -403,11 +403,11 @@ TEST_MODE=integration npm test
 
 | 测试项 | 命令 | 预期结果 |
 |--------|------|----------|
-| 构建项目 | hdc build | 编译成功 |
-| 安装应用 | hdc install | 安装成功 |
-| 启动应用 | hdc launch | 应用启动 |
-| 查看日志 | hdc log --follow | 实时显示日志 |
-| 工作流 | hdc workflow dev | 全流程成功 |
+| 构建项目 | hv build | 编译成功 |
+| 安装应用 | hv install | 安装成功 |
+| 启动应用 | hv launch | 应用启动 |
+| 查看日志 | hv log --follow | 实时显示日志 |
+| 工作流 | hv workflow dev | 全流程成功 |
 
 ---
 
@@ -446,7 +446,7 @@ TEST_MODE=integration npm test
 
 ## 十二、参考资料
 
-- [HarmonyOS hdc 命令文档](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hdc-command-V5)
+- [HarmonyOS hv 命令文档](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hv-command-V5)
 - [HarmonyOS hiLog 命令文档](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-hilog-V5)
 - [Go CLI 最佳实践](https://github.com/spf13/cobra)
 - [DevEco Studio 命令行构建](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-command-line-building-V5)
@@ -476,7 +476,7 @@ TEST_MODE=integration npm test
 
 3. **实现第一个命令**
    - 选择 `device list` 作为起点（不需要项目文件）
-   - 验证 hdc 命令调用
+   - 验证 hv 命令调用
 
 4. **逐步实现其他命令**
    - 参考 [commands.md](./commands.md)
