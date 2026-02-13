@@ -46,6 +46,7 @@ export class Locator {
             name: entry,
             path: modulePath,
             hapOutput: join(modulePath, 'build/default/outputs/default'),
+            default: entry === 'entry',
           });
         }
       } catch {

@@ -78,7 +78,7 @@ export class HDCInstaller {
   /**
    * 查找 HAP 文件
    */
-  private findHapFile(): string | null {
+  private findHapFile(): string | undefined {
     const candidates = [
       // Debug 模式 - unsigned
       join(this.workDir, 'entry/build/default/outputs/default/entry-default-unsigned.hap'),
@@ -96,6 +96,6 @@ export class HDCInstaller {
       }
     }
 
-    return null;
+    return undefined;
   }
 }

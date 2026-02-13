@@ -10,6 +10,15 @@ export interface Device {
 }
 
 /**
+ * 项目
+ */
+export interface Project {
+  root: string;
+  appScope: string;
+  modules: Module[];
+}
+
+/**
  * 项目配置
  */
 export interface ProjectConfig {
