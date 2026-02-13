@@ -52,12 +52,12 @@ npm install
 npm run build
 ```
 
-### 4. 配置 Claude Desktop
+### 4. 配置 Claude Code
 
-编辑 Claude Desktop 配置文件：
+编辑 Claude Code 配置文件：
 
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **macOS**: `~/.claude.json`
+- **Windows**: `%APPDATA%\Claude\claude.json`
 
 ```json
 {
@@ -70,7 +70,7 @@ npm run build
 }
 ```
 
-### 5. 重启 Claude Desktop
+### 5. 重启 Claude Code
 
 重启后 MCP 工具自动加载。
 
@@ -85,7 +85,7 @@ npm run build
 
 ## 使用示例
 
-重启 Claude Desktop 后，直接对话：
+重启 Claude Code 后，直接对话：
 
 ```
 你: 帮我检查一下开发环境
