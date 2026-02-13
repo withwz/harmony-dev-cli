@@ -12,7 +12,7 @@ import { doctor } from './doctor.js';
 // MCP Server 实例
 const server = new Server(
   {
-    name: 'mcp-server-harmonyos',
+    name: 'harmonyos-control',
     version: '0.1.0',
   },
   {
