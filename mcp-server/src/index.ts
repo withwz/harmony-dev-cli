@@ -90,6 +90,27 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
         },
       },
+      {
+        name: 'hv_start',
+        description: '启动 HarmonyOS 应用',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            project: {
+              type: 'string',
+              description: 'HarmonyOS 项目路径',
+            },
+            bundle: {
+              type: 'string',
+              description: '应用包名 (可选，自动读取)',
+            },
+            ability: {
+              type: 'string',
+              description: 'Ability 名称 (可选，默认 EntryAbility)',
+            },
+          },
+        },
+      },
     ],
   };
 });
@@ -194,6 +215,34 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             {
               type: 'text',
               text: lines.join('\n') + summary,
+            },
+          ],
+        };
+      }
+
+      case 'hv_start': {
+        const project = args?.project as string | undefined;
+        const bundle = args?.bundle as string | undefined;
+        const ability = args?.ability as string | undefined;
+
+        const cmdArgs = ['start'];
+        if (bundle) {
+          cmdArgs.push('--bundle', bundle);
+        }
+        if (ability) {
+          cmdArgs.push('--ability', ability);
+        }
+
+        const result = await execa('hv', cmdArgs, {
+          cwd: project || process.cwd(),
+          timeout: 15000,
+        });
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: result.stdout || '应用已启动',
             },
           ],
         };
