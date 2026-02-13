@@ -47,13 +47,30 @@ export class HDCInstaller {
     console.log(`执行: hdc ${args.join(' ')}`);
 
     try {
-      await execa('hdc', args, {
-        stdout: 'inherit',
-        stderr: 'inherit',
+      const result = await execa('hdc', args, {
+        stdout: 'pipe',
+        stderr: 'pipe',
       });
+
+      // 打印输出
+      if (result.stdout) {
+        console.log(result.stdout);
+      }
+      if (result.stderr) {
+        console.error(result.stderr);
+      }
+
+      // 检查退出码
+      if (result.exitCode !== 0) {
+        throw new Error(`安装失败，退出码: ${result.exitCode}`);
+      }
+
       console.log('\n✅ 安装成功');
-    } catch (error) {
+    } catch (error: any) {
       console.error('\n❌ 安装失败');
+      if (error.stderr) {
+        console.error(error.stderr);
+      }
       throw error;
     }
   }
@@ -63,7 +80,9 @@ export class HDCInstaller {
    */
   private findHapFile(): string | null {
     const candidates = [
-      // Debug 模式
+      // Debug 模式 - unsigned
+      join(this.workDir, 'entry/build/default/outputs/default/entry-default-unsigned.hap'),
+      // Debug 模式 - signed
       join(this.workDir, 'entry/build/default/outputs/default/entry-default.hap'),
       join(this.workDir, 'entry/build/default/outputs/default/entry-signed.hap'),
       // Release 模式
