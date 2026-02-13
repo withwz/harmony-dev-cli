@@ -21,10 +21,10 @@ export class HiLogReader {
       return;
     }
 
-    const args = this.buildArgs(options);
+    const cmd = this.buildCommand(options);
 
     try {
-      await execa('hdc', ['shell', 'hilog', ...args], {
+      await execa(cmd.command, cmd.args, {
         stdout: 'inherit',
         stderr: 'inherit',
       });
@@ -38,15 +38,37 @@ export class HiLogReader {
    * 实时跟踪日志
    */
   follow(options: LogOptions): ExecaChildProcess {
-    const args = this.buildArgs(options);
-    args.push('-T'); // 实时模式
+    const cmd = this.buildCommand(options);
 
     console.log('📋 正在实时跟踪日志 (Ctrl+C 退出)...\n');
+    if (options.filter) {
+      console.log(`   过滤: ${options.filter}\n`);
+    }
 
-    return execa('hdc', ['shell', 'hilog', ...args], {
+    return execa(cmd.command, cmd.args, {
       stdout: 'inherit',
       stderr: 'inherit',
     });
+  }
+
+  /**
+   * 构建完整命令
+   */
+  private buildCommand(options: LogOptions): { command: string; args: string[] } {
+    const args = this.buildArgs(options);
+
+    // 如果有过滤，使用管道 + grep
+    if (options.filter) {
+      return {
+        command: 'sh',
+        args: ['-c', `hdc shell hilog ${args.join(' ')} | grep -i "${options.filter}"`],
+      };
+    }
+
+    return {
+      command: 'hdc',
+      args: ['shell', 'hilog', ...args],
+    };
   }
 
   /**
@@ -62,14 +84,9 @@ export class HiLogReader {
   private buildArgs(options: LogOptions): string[] {
     const args: string[] = [];
 
-    if (options.level) {
-      args.push('-L', options.level);
-    }
-
-    if (options.filter) {
-      // 使用 grep 过滤
-      // 注意：这会在 shell 中执行，需要转义
-    }
+    // 默认只显示 I/W/E 级别，过滤掉 D 级别
+    const level = options.level || 'I';
+    args.push('-L', level);
 
     return args;
   }
