@@ -19,16 +19,29 @@ Claude: [调用 hv_build，分析错误] 找到问题了，是类型错误...
 
 ## 安装
 
-### 1. 克隆项目
+### 前置要求
+
+- Node.js 18+
+- HarmonyOS SDK (hvigorw, hdc)
+
+### 1. 安装 CLI 工具
+
+MCP Server 依赖 `hv` 命令，需要先全局安装：
 
 ```bash
-git clone https://github.com/a0000/harmony-dev-cli.git
-cd harmony-dev-cli/mcp-server
+cd harmony-dev-cli
+npm install -g .
 ```
 
-### 2. 安装依赖并构建
+验证安装：
+```bash
+hv --version
+```
+
+### 2. 安装 MCP Server
 
 ```bash
+cd mcp-server
 npm install
 npm run build
 ```
