@@ -1,6 +1,6 @@
 # HarmonyOS Dev CLI (hv)
 
-> 脱离 DevEco Studio 开发 HarmonyOS 应用，方便与 Claude 等 LLM 协作调试
+> 脱离 DevEco Studio 开发 HarmonyOS 应用，支持 Claude MCP
 
 ## 为什么用这个工具？
 
@@ -123,6 +123,57 @@ hv build && hv install && hv log -f
 | 构建项目 | Build → Build Hap(s) | `hv build` |
 | 安装到设备 | Run → Run 'entry' | `hv install` |
 | 查看日志 | 底部 HiLog 窗口 | `hv log -f` |
+
+## Claude MCP 集成
+
+本工具提供 MCP Server，让 Claude Desktop 能够直接调用 HarmonyOS 开发命令。
+
+### 安装 MCP Server
+
+```bash
+cd mcp-server
+npm install
+npm run build
+```
+
+### 配置 Claude Desktop
+
+编辑 Claude Desktop 配置文件（macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`）：
+
+```json
+{
+  "mcpServers": {
+    "harmonyos": {
+      "command": "node",
+      "args": ["/Users/a0000/Desktop/myproject/harmony-dev-cli/mcp-server/dist/index.js"]
+    }
+  }
+}
+```
+
+### Claude 使用示例
+
+重启 Claude Desktop 后，你可以直接与 Claude 对话：
+
+```
+你: 帮我构建 HarmonyOS 项目
+Claude: [调用 hv_build 工具] 构建完成
+
+你: 查看应用日志
+Claude: [调用 hv_log 工具] 显示最新日志...
+
+你: 构建失败了，看看什么问题
+Claude: [调用 hv_build，分析错误] 找到问题了，是类型错误...
+```
+
+### 可用 MCP 工具
+
+| 工具 | 说明 |
+|------|------|
+| `hv_build` | 构建项目 |
+| `hv_install` | 安装到设备 |
+| `hv_log` | 查看日志 |
+| `hv_doctor` | 环境检查 |
 
 ## 开发
 
