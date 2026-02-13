@@ -22,9 +22,7 @@
 
 git clone https://github.com/a0000/harmony-dev-cli.git
 cd harmony-dev-cli
-npm install
-npm run build
-npm link
+npm install -g .
 ```
 
 ## 快速开始
